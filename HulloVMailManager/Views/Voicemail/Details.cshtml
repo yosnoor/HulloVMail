@@ -1,0 +1,15 @@
+﻿@model HulloVMailManager.Models.Voicemail
+
+@{
+    ViewBag.Title = "Voicemail Details";
+}
+
+<h1>@ViewBag.Title</h1>
+
+<br />
+<div class="voicemail">
+    VoicemailID: <span class="voicemail-id">@Html.Encode(Model.ID)</span><br />
+    From: <span class="voicemail-from">@Html.Encode(Model.From)</span><br />
+    Date: <span class="voicmail-recordeddate">@Html.Encode(Model.RecordedDate.ToString())</span><br />
+    Message: @Html.ActionLink("message.mp3", "DownloadMessage", "Voicemail", new { id = Model.ID }, new { @class = "voicemail-message" })
+</div>

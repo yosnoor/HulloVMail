@@ -1,4 +1,5 @@
-﻿using HulloVMailService;
+﻿using System.Data.Entity;
+using HulloVMailService;
 using HulloVMailService.Imap;
 using HulloVMailService.Models;
 using System;
@@ -13,16 +14,27 @@ namespace HulloVMailWinService
     {
         static void Main(string[] args)
         {
-            var emailCount = 0;
-            using (var imap = new ImapClient("imap.gmail.com", "yosnoor@gmail.com", "plpzcarxfnvsglau", ImapClient.AuthMethods.Login, 993, true))
+//            using (var imap = new ImapClient("imap.gmail.com", "yosnoor@gmail.com", "plpzcarxfnvsglau", ImapClient.AuthMethods.Login, 993, true))
+            using (var imap = new ImapClient("imap.gmail.com", "hullovmail@gmail.com", "strumpet", ImapClient.AuthMethods.Login, 993, true))
             {
                 imap.SelectMailbox("HulloMail");
 
-                var msgs =
-                    imap.SearchMessages(
-                        SearchCondition.Subject("voicemail").And(SearchCondition.Unseen()).And(
-                            SearchCondition.SentSince(DateTime.Now.AddYears(-1))));
-                emailCount = msgs.Length;
+                Lazy<MailMessage>[] msgs = null;
+                if (args.Length > 0 && args[0] == "1")
+                {
+                    // Get ALL voicemails
+                    msgs =
+                        imap.SearchMessages(
+                            SearchCondition.Subject("voicemail").And(SearchCondition.SentSince(DateTime.Now.AddYears(-2))));
+                }
+                else
+                {
+                    // Get only NEW (UNREAD) voicemails
+                    msgs =
+                        imap.SearchMessages(
+                            SearchCondition.Subject("voicemail").And(SearchCondition.Unseen()).And(
+                                SearchCondition.SentSince(DateTime.Now.AddYears(-2))));
+                }
 
                 if (msgs.Length > 0)
                 {
@@ -31,6 +43,7 @@ namespace HulloVMailWinService
 
                     // Loop through each email and check for audio attachments
                     var voicemails = new List<Voicemail>();
+                    var voicemailDB = new VoicemailDBContext();
                     foreach (var msg in msgs)
                     {
                         var audio = (from attachment in msg.Value.Attachments
@@ -39,18 +52,26 @@ namespace HulloVMailWinService
 
                         if (audio.Count<Attachment>() > 0)
                         {
-                            var voicemail = new Voicemail();
-                            voicemail.From = (msg.Value.ReplyTo.Count) == 0 ? msg.Value.From.Address : msg.Value.ReplyTo.FirstOrDefault().Address;
-                            voicemail.RecordedDate = msg.Value.Date;
-                            voicemail.IsNew = !msg.Value.Flags.HasFlag(Flags.Seen);
-                            voicemail.FromDisplay = (msg.Value.From.DisplayName.ToLower() == "hullomail") ? "Unknown" : msg.Value.From.DisplayName;
+                            // Check if it already exists on the DB
+                            var From = (msg.Value.ReplyTo.Count) == 0
+                                ? msg.Value.From.Address
+                                : msg.Value.ReplyTo.FirstOrDefault().Address;
+                            if (
+                                !voicemailDB.Voicemails.Select(v => v.From == From && v.RecordedDate == msg.Value.Date)
+                                    .Any())
+                            {
+                                var voicemail = new Voicemail();
+                                voicemail.From = From;
+                                voicemail.RecordedDate = msg.Value.Date;
+                                voicemail.IsNew = !msg.Value.Flags.HasFlag(Flags.Seen);
+                                voicemail.FromDisplay = (msg.Value.From.DisplayName.ToLower() == "hullomail") ? "Unknown" : msg.Value.From.DisplayName;
 
-                            voicemail.Message = audio.First<Attachment>().GetData();
-                            voicemails.Add(voicemail);
+                                voicemail.Message = audio.First<Attachment>().GetData();
+                                voicemails.Add(voicemail);
+                            }
                         }
                     }
 
-                    var voicemailDB = new VoicemailDBContext();
                     voicemails.ForEach(v => voicemailDB.Voicemails.Add(v));
                     try
                     {

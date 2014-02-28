@@ -13,9 +13,9 @@ namespace HulloVMailManager.Controllers
 
         public ActionResult Index(string loadNew)
         {
-            if (loadNew == "new" || loadNew == "all")
+            if (loadNew == "new" || loadNew == "refresh")
             {
-                if (loadNew == "all")
+                if (loadNew == "refresh")
                 {
                     foreach (var voicemail in _voicemailDB.Voicemails)
                     {
@@ -33,32 +33,47 @@ namespace HulloVMailManager.Controllers
 
                     if (loadNew == "new")
                     {
-                        msgs = imap.SearchMessages(SearchCondition.Subject("voicemail"));
+                        // Get just new voicemails
+                        msgs = imap.SearchMessages(SearchCondition.Subject("voicemail").And(SearchCondition.Unseen()));
                     }
                     else
                     {
-                        msgs = imap.SearchMessages(SearchCondition.Subject("voicemail").And(SearchCondition.SentSince(DateTime.Now.AddYears(-1))));
+                        // Get all voicemails from email as the DB has been deleted
+                        msgs = imap.SearchMessages(SearchCondition.Subject("voicemail").And(SearchCondition.SentSince(DateTime.Now.AddYears(-2))));
                     }
 
                     var voicemails = new List<Voicemail>();
-                    for (int i = 0; i < msgs.Length; i++)
+                    foreach (var msg in msgs)
                     {
                         // Check if message has any audio attachments
-                        var audio = (from attachment in msgs[i].Value.Attachments
+                        var audio = (from attachment in msg.Value.Attachments
                                      //                                     where attachment.Filename.EndsWith(".mp3")
                                      where attachment.ContentType.Contains("mp3")
                                      select attachment);
 
                         if (audio.Count<Attachment>() > 0)
                         {
-                            var voicemail = new Voicemail();
-                            voicemail.From = (msgs[i].Value.ReplyTo.Count) == 0 ? msgs[i].Value.From.Address : msgs[i].Value.ReplyTo.FirstOrDefault().Address;
-                            voicemail.RecordedDate = msgs[i].Value.Date;
-                            voicemail.IsNew = !msgs[i].Value.Flags.HasFlag(Flags.Seen);
-                            voicemail.FromDisplay = (msgs[i].Value.From.DisplayName.ToLower() == "hullomail") ? "Unknown" : msgs[i].Value.From.DisplayName;
+                            // Check if it already exists on the DB
+                            var From = (msg.Value.ReplyTo.Count) == 0
+                                ? msg.Value.From.Address
+                                : msg.Value.ReplyTo.FirstOrDefault().Address;
+                            if (
+                                !_voicemailDB.Voicemails.Select(v => v.From == From && v.RecordedDate == msg.Value.Date)
+                                    .Any())
+                            {
+                                var voicemail = new Voicemail();
+                                voicemail.From = (msg.Value.ReplyTo.Count) == 0
+                                    ? msg.Value.From.Address
+                                    : msg.Value.ReplyTo.FirstOrDefault().Address;
+                                voicemail.RecordedDate = msg.Value.Date;
+                                voicemail.IsNew = !msg.Value.Flags.HasFlag(Flags.Seen);
+                                voicemail.FromDisplay = (msg.Value.From.DisplayName.ToLower() == "hullomail")
+                                    ? "Unknown"
+                                    : msg.Value.From.DisplayName;
 
-                            voicemail.Message = audio.First<Attachment>().GetData();
-                            voicemails.Add(voicemail);
+                                voicemail.Message = audio.First<Attachment>().GetData();
+                                voicemails.Add(voicemail);
+                            }
                         }
                     }
 
