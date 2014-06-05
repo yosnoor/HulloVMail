@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace HulloVMailService.Imap {
+namespace HulloVMailWinService.Imap {
 
   public class SearchCondition {
     public static SearchCondition Text(string text) { return new SearchCondition { Field = Fields.Text, Value = text }; }

@@ -5,7 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 
-namespace HulloVMailService.Models
+namespace HulloVMailWinService.Models
 {
     public class Voicemail
     {

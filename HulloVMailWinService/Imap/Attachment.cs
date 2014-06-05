@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 
-namespace HulloVMailService {
+namespace HulloVMailWinService.Imap {
     public class Attachment : ObjectWHeaders {
         public string Filename {
             get { return Headers["Content-Disposition"]["filename"]; }

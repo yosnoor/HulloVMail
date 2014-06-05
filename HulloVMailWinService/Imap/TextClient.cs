@@ -4,7 +4,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace HulloVMailService {
+namespace HulloVMailWinService.Imap {
   public abstract class TextClient : IDisposable {
     protected TcpClient _Connection;
     protected Stream _Stream;

@@ -1,4 +1,4 @@
-namespace HulloVMailService.Imap {
+namespace HulloVMailWinService.Imap {
     public class Quota {
         private string ressource;
         private string usage;

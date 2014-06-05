@@ -1,5 +1,5 @@
 
-namespace HulloVMailService.Imap {
+namespace HulloVMailWinService.Imap {
     public class Mailbox {
         public Mailbox() : this(string.Empty) { }
         public Mailbox(string name) {

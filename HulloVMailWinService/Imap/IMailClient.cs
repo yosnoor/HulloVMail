@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HulloVMailService {
+namespace HulloVMailWinService.Imap {
     public interface IMailClient : IDisposable {
         int GetMessageCount();
         MailMessage GetMessage(int index, bool headersonly = false);

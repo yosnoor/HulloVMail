@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 
-namespace HulloVMailService {
+namespace HulloVMailWinService.Imap {
   public class SafeDictionary<KT, VT> : Dictionary<KT, VT> {
     public SafeDictionary() { }
     public SafeDictionary(IEqualityComparer<KT> comparer) : base(comparer) { }

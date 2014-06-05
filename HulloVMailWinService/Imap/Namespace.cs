@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace HulloVMailService.Imap {
+namespace HulloVMailWinService.Imap {
     public class Namespaces {
         private Collection<Namespace> _servernamespace = new Collection<Namespace>();
         private Collection<Namespace> _usernamespace = new Collection<Namespace>();

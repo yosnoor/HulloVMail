@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
 
-namespace HulloVMailService {
+namespace HulloVMailWinService.Imap {
   internal static class Utilities {
     internal static string NotEmpty(this string input, params string[] others) {
       if (!string.IsNullOrEmpty(input)) return input;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HulloVMailService {
+namespace HulloVMailWinService.Imap {
   public abstract class ObjectWHeaders {
     public string RawHeaders { get; internal set; }
     private HeaderCollection _Headers;

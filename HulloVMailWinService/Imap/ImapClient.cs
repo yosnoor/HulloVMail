@@ -5,9 +5,8 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Text;
-using HulloVMailService.Imap;
 
-namespace HulloVMailService {
+namespace HulloVMailWinService.Imap {
 
   public class ImapClient : TextClient, IMailClient {
     private string _selectedMailbox;

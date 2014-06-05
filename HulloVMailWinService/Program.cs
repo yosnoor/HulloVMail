@@ -1,6 +1,6 @@
-﻿using HulloVMailService;
-using HulloVMailService.Imap;
-using HulloVMailService.Models;
+﻿using HulloVMailWinService;
+using HulloVMailWinService.Imap;
+using HulloVMailWinService.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +18,24 @@ namespace HulloVMailWinService
             {
                 imap.SelectMailbox("HulloMail");
 
-                var msgs =
-                    imap.SearchMessages(
-                        SearchCondition.Subject("voicemail").And(SearchCondition.Unseen()).And(
-                            SearchCondition.SentSince(DateTime.Now.AddYears(-1))));
+                Lazy<MailMessage>[] msgs = null;
+
+                if (args.Count() == 1 && args[0] == "all")
+                {
+                    // Check all voicemails read or not
+                    msgs = imap.SearchMessages(
+                        SearchCondition.Subject("voicemail").
+                        And(SearchCondition.SentSince(DateTime.Now.AddYears(-1))));
+                }
+                else
+                {
+                    // Only check for UNREAD voicemails
+                    msgs = imap.SearchMessages(
+                                SearchCondition.Subject("voicemail").
+                                And(SearchCondition.Unseen()).
+                                And(SearchCondition.SentSince(DateTime.Now.AddYears(-1))));
+                }
+
                 emailCount = msgs.Length;
 
                 if (msgs.Length > 0)
