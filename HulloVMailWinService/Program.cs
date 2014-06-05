@@ -1,7 +1,6 @@
 ﻿using System.Data.Entity;
-using HulloVMailService;
-using HulloVMailService.Imap;
-using HulloVMailService.Models;
+using HulloVMailWinService.Imap;
+using HulloVMailWinService.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
