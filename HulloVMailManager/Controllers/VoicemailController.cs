@@ -13,8 +13,85 @@ namespace HulloVMailManager.Controllers
 
         public ActionResult Index(string loadNew)
         {
-            if (loadNew == "new" || loadNew == "all")
+            if (loadNew == "new" || loadNew == "refresh")
             {
+                if (loadNew == "refresh")
+                {
+                    foreach (var voicemail in _voicemailDB.Voicemails)
+                    {
+                        _voicemailDB.Voicemails.Attach(voicemail);
+                        _voicemailDB.Voicemails.Remove(voicemail);
+                    }
+                    _voicemailDB.SaveChanges();
+                }
+
+                using (var imap = new ImapClient("imap.gmail.com", "hullovmail@gmail.com", "strumpet",
+                                                    ImapClient.AuthMethods.Login, 993, true))
+                {
+                    imap.SelectMailbox("HulloMail");
+                    Lazy<MailMessage>[] msgs = null;
+
+                    if (loadNew == "new")
+                    {
+                        // Get just new voicemails
+                        msgs = imap.SearchMessages(SearchCondition.Subject("voicemail").And(SearchCondition.Unseen()));
+                    }
+                    else
+                    {
+                        // Get all voicemails from email as the DB has been deleted
+                        msgs = imap.SearchMessages(SearchCondition.Subject("voicemail").And(SearchCondition.SentSince(DateTime.Now.AddYears(-2))));
+                    }
+
+                    var voicemails = new List<Voicemail>();
+                    foreach (var msg in msgs)
+                    {
+                        // Check if message has any audio attachments
+                        var audio = (from attachment in msg.Value.Attachments
+                                     //                                     where attachment.Filename.EndsWith(".mp3")
+                                     where attachment.ContentType.Contains("mp3")
+                                     select attachment);
+
+                        if (audio.Count<Attachment>() > 0)
+                        {
+                            // Check if it already exists on the DB
+                            var From = (msg.Value.ReplyTo.Count) == 0
+                                ? msg.Value.From.Address
+                                : msg.Value.ReplyTo.FirstOrDefault().Address;
+                            if (
+                                !_voicemailDB.Voicemails.Select(v => v.From == From && v.RecordedDate == msg.Value.Date)
+                                    .Any())
+                            {
+                                var voicemail = new Voicemail();
+                                voicemail.From = (msg.Value.ReplyTo.Count) == 0
+                                    ? msg.Value.From.Address
+                                    : msg.Value.ReplyTo.FirstOrDefault().Address;
+                                voicemail.RecordedDate = msg.Value.Date;
+                                voicemail.IsNew = !msg.Value.Flags.HasFlag(Flags.Seen);
+                                voicemail.FromDisplay = (msg.Value.From.DisplayName.ToLower() == "hullomail")
+                                    ? "Unknown"
+                                    : msg.Value.From.DisplayName;
+
+                                voicemail.Message = audio.First<Attachment>().GetData();
+                                voicemails.Add(voicemail);
+                            }
+                        }
+                    }
+
+                    voicemails.ForEach(v => _voicemailDB.Voicemails.Add(v));
+                    try
+                    {
+                        _voicemailDB.SaveChanges();
+                    }
+                    catch (Exception)
+                    {
+                        var temp = _voicemailDB.GetValidationErrors();
+                        foreach (var message in temp)
+                        {
+                            var m = message.ToString();
+                        }
+                        throw;
+                    }
+                }
             }
 
             var vmi = new List<Voicemail>();
