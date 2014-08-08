@@ -56,6 +56,7 @@ namespace HulloVMailWinService
                             var From = (msg.Value.ReplyTo.Count) == 0
                                 ? msg.Value.From.Address
                                 : msg.Value.ReplyTo.FirstOrDefault().Address;
+                            var temp = voicemailDB.Voicemails.Select(v => v.From == From && v.RecordedDate == msg.Value.Date).Count();
                             if (
                                 !voicemailDB.Voicemails.Select(v => v.From == From && v.RecordedDate == msg.Value.Date)
                                     .Any())

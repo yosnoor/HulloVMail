@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Data.Json;
 
-namespace HulloVMailUniversal.DataModel
+namespace HulloVMailUniversal.Data
 {
     /// <summary>
     /// Creates a collection of groups and items with content read from a static
@@ -60,7 +60,7 @@ namespace HulloVMailUniversal.DataModel
                     this.Hullos.Add(new HulloData(Int32.Parse(itemObject["Id"].GetString()),
                                                    itemObject["From"].GetString(),
                                                    DateTime.Parse(itemObject["RecordedDate"].GetString()),
-                                                   Encoding.UTF8.GetBytes(itemObject["message"].GetString()),
+                                                   Encoding.UTF8.GetBytes(itemObject["Message"].GetString()),
                                                    itemObject["IsNew"].GetBoolean(),
                                                    itemObject["EmailId"].GetString(),
                                                    itemObject["FromDisplay"].GetString()));
