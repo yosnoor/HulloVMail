@@ -79,8 +79,10 @@ namespace HulloVMailUniversal
         private async void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            var hulloDataGroups = await HulloDataSource.GetHullosAsync();
-            this.DefaultViewModel["Hullos"] = hulloDataGroups;
+            var hullos = await HulloDataSource.GetHullosAsync();
+            var newHullos = await HulloDataSource.GetNewHullosAsync();
+            this.DefaultViewModel["Hullos"] = hullos;
+            this.DefaultViewModel["NewHullos"] = newHullos;
         }
 
         /// <summary>

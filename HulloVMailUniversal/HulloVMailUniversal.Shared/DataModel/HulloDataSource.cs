@@ -26,11 +26,22 @@ namespace HulloVMailUniversal.Data
             get { return this._hullos; }
         }
 
+        private ObservableCollection<HulloData> _newHullos = new ObservableCollection<HulloData>();
+        public ObservableCollection<HulloData> NewHullos
+        {
+            get { return this._newHullos; }
+        }
+
         public static async Task<IEnumerable<HulloData>> GetHullosAsync()
         {
             await _hulloDataSource.GetHulloDataAsync();
-
             return _hulloDataSource.Hullos;
+        }
+
+        public static async Task<IEnumerable<HulloData>> GetNewHullosAsync()
+        {
+            await _hulloDataSource.GetHulloDataAsync();
+            return _hulloDataSource.NewHullos;
         }
 
         public static async Task<HulloData> GetHulloAsync(int id)
@@ -56,14 +67,25 @@ namespace HulloVMailUniversal.Data
 
             foreach (var hulloValue in jsonArray)
             {
-                    var itemObject = hulloValue.GetObject();
-                    this.Hullos.Add(new HulloData(Int32.Parse(itemObject["Id"].GetString()),
-                                                   itemObject["From"].GetString(),
-                                                   DateTime.Parse(itemObject["RecordedDate"].GetString()),
-                                                   Encoding.UTF8.GetBytes(itemObject["Message"].GetString()),
-                                                   itemObject["IsNew"].GetBoolean(),
-                                                   itemObject["EmailId"].GetString(),
-                                                   itemObject["FromDisplay"].GetString()));
+                var itemObject = hulloValue.GetObject();
+                this.Hullos.Add(new HulloData(Int32.Parse(itemObject["Id"].GetString()),
+                                                itemObject["From"].GetString(),
+                                                DateTime.Parse(itemObject["RecordedDate"].GetString()),
+                                                Encoding.UTF8.GetBytes(itemObject["Message"].GetString()),
+                                                itemObject["IsNew"].GetBoolean(),
+                                                itemObject["EmailId"].GetString(),
+                                                itemObject["FromDisplay"].GetString()));
+
+                if (itemObject["IsNew"].GetBoolean() == true)
+                {
+                    this.NewHullos.Add(new HulloData(Int32.Parse(itemObject["Id"].GetString()),
+                                                    itemObject["From"].GetString(),
+                                                    DateTime.Parse(itemObject["RecordedDate"].GetString()),
+                                                    Encoding.UTF8.GetBytes(itemObject["Message"].GetString()),
+                                                    itemObject["IsNew"].GetBoolean(),
+                                                    itemObject["EmailId"].GetString(),
+                                                    itemObject["FromDisplay"].GetString()));
+                }
             }
         }
     }

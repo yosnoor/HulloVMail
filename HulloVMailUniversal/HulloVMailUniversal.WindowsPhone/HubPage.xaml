@@ -61,7 +61,7 @@
             </HubSection>
 
             <HubSection x:Uid="NewHulloHubSection" Header="New Hullos"
-                        DataContext="{Binding Hullos}" HeaderTemplate="{ThemeResource HubSectionHeaderTemplate}">
+                        DataContext="{Binding NewHullos}" HeaderTemplate="{ThemeResource HubSectionHeaderTemplate}">
                 <DataTemplate>
                     <ListView 
                         AutomationProperties.AutomationId="ItemListViewSection3"

@@ -35,13 +35,31 @@
         <!-- Title Panel -->
         <StackPanel Grid.Row="0" Margin="19,0,0,0">
             <TextBlock x:Uid="Header" Text="application name" Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0" />
-            <TextBlock Text="{Binding Title}" Style="{ThemeResource HeaderTextBlockStyle}" Margin="0,-6.5,0,26.5" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
+            <TextBlock Text="{Binding From}" Style="{ThemeResource HeaderTextBlockStyle}" Margin="0,-6.5,0,26.5" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}"/>
         </StackPanel>
 
         <!--TODO: Content should be placed within the following grid 
                   to show details for the current item -->
         <Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
-
+            <Grid.RowDefinitions>
+                <RowDefinition Height="100" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="300" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="125" />
+                <ColumnDefinition Width="125" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="Message" Text="{Binding FromDisplay}" FontSize="{ThemeResource TextStyleLargeFontSize}" Grid.Row="1" Grid.ColumnSpan="3"/>
+            <Image Name="ContactImage" Height="300" Width="300" HorizontalAlignment="Left" Source="Assets/Contact.png" Grid.Row="2" Grid.ColumnSpan="3"/>
+            <ProgressBar Name="pbMessage" Width="300" HorizontalAlignment="Left" Grid.Row="3" Padding="0" Grid.ColumnSpan="3"/>
+            <TextBlock x:Name="Start" Text="0:00" FontSize="15" Grid.Row="4" Grid.ColumnSpan="3"/>
+            <TextBlock x:Name="End" Width="300" FontSize="15" TextAlignment="Right" HorizontalAlignment="Left"  Grid.Row="4" Grid.ColumnSpan="3"/>
+            <TextBlock x:Name="Date" Text="{Binding RecordedDate}" Grid.Row="5" Grid.ColumnSpan="3"/>
         </Grid>
     </Grid>
 </Page>
