@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HulloVMailManager", "HulloVMailManager\HulloVMailManager.csproj", "{22DD1FDD-AE77-4291-94AA-2DD60D6E46F4}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HulloVMailUniversal.Windows", "HulloVMailUniversal\HulloVMailUniversal.Windows\HulloVMailUniversal.Windows.csproj", "{6DBDFFF4-1A56-49AB-BD26-05E673B63F65}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HulloVMailUniversal.WindowsPhone", "HulloVMailUniversal\HulloVMailUniversal.WindowsPhone\HulloVMailUniversal.WindowsPhone.csproj", "{44F4E731-25D2-4102-B83E-1B2060727399}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HulloVMailMobileServiceMobileService", "HulloVMailMobileServiceMobileService\HulloVMailMobileServiceMobileService.csproj", "{87500D57-AE94-4068-BED3-CD16134021E6}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -96,6 +98,16 @@ Global
 		{44F4E731-25D2-4102-B83E-1B2060727399}.Release|x86.ActiveCfg = Release|x86
 		{44F4E731-25D2-4102-B83E-1B2060727399}.Release|x86.Build.0 = Release|x86
 		{44F4E731-25D2-4102-B83E-1B2060727399}.Release|x86.Deploy.0 = Release|x86
+		{87500D57-AE94-4068-BED3-CD16134021E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87500D57-AE94-4068-BED3-CD16134021E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87500D57-AE94-4068-BED3-CD16134021E6}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{87500D57-AE94-4068-BED3-CD16134021E6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{87500D57-AE94-4068-BED3-CD16134021E6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{87500D57-AE94-4068-BED3-CD16134021E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87500D57-AE94-4068-BED3-CD16134021E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87500D57-AE94-4068-BED3-CD16134021E6}.Release|ARM.ActiveCfg = Release|Any CPU
+		{87500D57-AE94-4068-BED3-CD16134021E6}.Release|x64.ActiveCfg = Release|Any CPU
+		{87500D57-AE94-4068-BED3-CD16134021E6}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

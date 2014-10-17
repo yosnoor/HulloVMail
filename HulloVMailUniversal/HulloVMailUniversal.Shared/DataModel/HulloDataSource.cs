@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Data.Json;
@@ -60,6 +61,8 @@ namespace HulloVMailUniversal.Data
 
             Uri dataUri = new Uri("ms-appx:///DataModel/HulloData.json");
 
+            // Connect to DB and get hullos
+            
             Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(dataUri);
             string jsonText = await Windows.Storage.FileIO.ReadTextAsync(file);
             var jsonObject = JsonObject.Parse(jsonText);

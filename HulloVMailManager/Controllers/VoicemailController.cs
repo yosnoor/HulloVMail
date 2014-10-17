@@ -242,7 +242,7 @@ namespace HulloVMailManager.Controllers
                 return null;
             }
 
-            return File(vm.Message.ToArray(), "audio/mpeg3", string.Format("{0}.mp3", vm.ID.ToString()));
+            return File(vm.Message.ToArray(), "audio/mpeg3", string.Format("{0}.mp3", vm.VoicemailID.ToString()));
         }
 
         public ActionResult NotifyNewVoicemail(string sender)
